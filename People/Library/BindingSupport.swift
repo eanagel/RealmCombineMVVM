@@ -14,6 +14,7 @@ func *= <O, T, P>(lhs: Binding<O, T>, rhs: P) where P: Publisher, P.Output == T 
 }
 
 func *= <O, T, P>(lhs: Binding<O, T?>, rhs: P) where P: Publisher, P.Output == T {
+    // this flavor allows us to bind a nullable value to a non-nullable value without coercion
     BindingGroup.add(rhs.sink(lhs))
 }
 
@@ -28,10 +29,7 @@ class Binding<O: AnyObject, T> {
 }
 
 extension Publisher {
-    func sink<O: AnyObject>(_ binding: Binding<O,Output>) -> AnyCancellable {
-        let object = binding.object
-        let keyPath = binding.keyPath
-        
+    fileprivate func _sink<O: AnyObject>(object: O, setValue: @escaping (inout O, Output) -> Void) -> AnyCancellable {
         var sink: AnyCancellable?
             
         sink = self.sink(receiveCompletion: { (_) in }) { [weak object, weak sink] (value) in
@@ -41,31 +39,18 @@ extension Publisher {
                 return
             }
             
-            object[keyPath: keyPath] = value
+            setValue(&object, value)
         }
         
         return sink!
     }
     
+    func sink<O: AnyObject>(_ binding: Binding<O,Output>) -> AnyCancellable {
+        return _sink(object: binding.object, setValue: { $0[keyPath: binding.keyPath] = $1 })
+    }
+    
     func sink<O: AnyObject>(_ binding: Binding<O,Output?>) -> AnyCancellable {
-        // todo: we shouldn't have to duplicate this!
-        
-        let object = binding.object
-        let keyPath = binding.keyPath
-        
-        var sink: AnyCancellable?
-            
-        sink = self.sink(receiveCompletion: { (_) in }) { [weak object, weak sink] (value) in
-            guard var object = object else {
-                sink?.cancel() // cancel the sink if the object no longer exists
-                sink = nil
-                return
-            }
-            
-            object[keyPath: keyPath] = value
-        }
-        
-        return sink!
+        return _sink(object: binding.object, setValue: { $0[keyPath: binding.keyPath] = $1 })
     }
 }
 

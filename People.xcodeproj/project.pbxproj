@@ -103,6 +103,8 @@
 		F0B5053824DD92E0008C97BD /* People */ = {
 			isa = PBXGroup;
 			children = (
+				F0F7E02524E304BD00313C7F /* Library */,
+				F0F7E02424E3045F00313C7F /* API */,
 				F0B5056324DD93C9008C97BD /* Models */,
 				F0B5056424DD93D3008C97BD /* Views */,
 				F0B5053924DD92E0008C97BD /* AppDelegate.swift */,
@@ -110,10 +112,6 @@
 				F0B5054224DD92E2008C97BD /* Assets.xcassets */,
 				F0B5054424DD92E2008C97BD /* LaunchScreen.storyboard */,
 				F0B5054724DD92E2008C97BD /* Info.plist */,
-				F027936924E2224600F72530 /* ViewModel.swift */,
-				F0F7E01624E26BC200313C7F /* BindingSupport.swift */,
-				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
-				F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */,
 			);
 			path = People;
 			sourceTree = "<group>";
@@ -163,6 +161,24 @@
 				F0F7E01424E24DCF00313C7F /* Person.storyboard */,
 			);
 			path = Person;
+			sourceTree = "<group>";
+		};
+		F0F7E02424E3045F00313C7F /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		F0F7E02524E304BD00313C7F /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				F027936924E2224600F72530 /* ViewModel.swift */,
+				F0F7E01624E26BC200313C7F /* BindingSupport.swift */,
+				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
+				F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */,
+			);
+			path = Library;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
