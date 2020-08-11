@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Mev-R9-F9S">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Person-->
+        <scene sceneID="RCx-VA-Ahy">
+            <objects>
+                <viewController title="Person" id="Mev-R9-F9S" customClass="PersonViewController" customModule="People" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CPO-Yg-D4m">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96K-Oj-Eve">
+                                <rect key="frame" x="20" y="108" width="100" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="OtS-kE-PU6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ethan" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7r2-cp-2RD">
+                                <rect key="frame" x="120" y="108" width="44" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7XK-0n-r5O">
+                                <rect key="frame" x="20" y="149" width="100" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="kbp-df-pUq"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nagel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XVx-b3-EYc">
+                                <rect key="frame" x="120" y="149" width="45" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="7XK-0n-r5O" firstAttribute="top" secondItem="96K-Oj-Eve" secondAttribute="bottom" constant="20" id="0Zd-07-nG6"/>
+                            <constraint firstItem="7XK-0n-r5O" firstAttribute="leading" secondItem="hYR-JO-cIi" secondAttribute="leading" constant="20" id="770-8y-lqf"/>
+                            <constraint firstItem="96K-Oj-Eve" firstAttribute="leading" secondItem="hYR-JO-cIi" secondAttribute="leading" constant="20" id="ANL-dR-0Du"/>
+                            <constraint firstItem="96K-Oj-Eve" firstAttribute="top" secondItem="hYR-JO-cIi" secondAttribute="top" constant="20" id="QRp-h5-zv1"/>
+                            <constraint firstItem="XVx-b3-EYc" firstAttribute="leading" secondItem="7XK-0n-r5O" secondAttribute="trailing" id="XBV-Jl-nyZ"/>
+                            <constraint firstItem="7r2-cp-2RD" firstAttribute="top" secondItem="hYR-JO-cIi" secondAttribute="top" constant="20" id="ajA-RP-rUh"/>
+                            <constraint firstItem="XVx-b3-EYc" firstAttribute="top" secondItem="7r2-cp-2RD" secondAttribute="bottom" constant="20" id="d7Y-zw-phw"/>
+                            <constraint firstItem="7r2-cp-2RD" firstAttribute="leading" secondItem="96K-Oj-Eve" secondAttribute="trailing" id="mZ2-mc-I5h"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hYR-JO-cIi"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="firstName" destination="7r2-cp-2RD" id="bWG-91-PCT"/>
+                        <outlet property="lastName" destination="XVx-b3-EYc" id="xLT-GX-exa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l6J-qM-3Ge" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="198.55072463768118" y="138.61607142857142"/>
+        </scene>
+    </scenes>
+</document>
