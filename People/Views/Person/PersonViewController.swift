@@ -16,21 +16,14 @@ class PersonViewController: UIViewController {
     
     var personId: String = ""
     private var viewModel: PersonViewModel!
-    
-    private var bindings = Set<AnyCancellable>()
+    private var bindings: BindingGroup?
     
     func bind() {
-        viewModel.fullName.sink { (value) in
-            self.title = value
-        }.store(in: &bindings)
-        
-        viewModel.firstName.sink { (value) in
-            self.firstName.text = value
-        }.store(in: &bindings)
-        
-        viewModel.lastName.sink { (value) in
-            self.lastName.text = value
-        }.store(in: &bindings)
+        bindings = BindingGroup {
+            self.titleBinding *= viewModel.fullName
+            self.firstName.textBinding *= viewModel.firstName
+            self.lastName.textBinding *= viewModel.lastName
+        }
     }
     
     override func viewDidLoad() {
