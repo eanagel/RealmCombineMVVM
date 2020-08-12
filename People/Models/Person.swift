@@ -19,3 +19,9 @@ class Person: Object {
     override class func primaryKey() -> String? { "id" }
     override class func indexedProperties() -> [String] { ["firstName", "lastName"] }
 }
+
+extension Person {
+    @discardableResult static func add(firstName: String, lastName: String, phone: String, email: String) -> AddPersonMutation {
+        return MutationManager.shared.start(AddPersonMutation(firstName: firstName, lastName: lastName, phone: phone, email: email))
+    }
+}

@@ -28,6 +28,15 @@
 		F0F7E01724E26BC200313C7F /* BindingSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E01624E26BC200313C7F /* BindingSupport.swift */; };
 		F0F7E01924E2731100313C7F /* UIKitBindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E01824E2731100313C7F /* UIKitBindings.swift */; };
 		F0F7E01F24E27D8300313C7F /* TableViewBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */; };
+		F0F7E02824E3090E00313C7F /* PersonApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E02724E3090E00313C7F /* PersonApi.swift */; };
+		F0F7E02A24E30EB100313C7F /* Mutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E02924E30EB100313C7F /* Mutation.swift */; };
+		F0F7E02C24E311A100313C7F /* AddPersonMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E02B24E311A100313C7F /* AddPersonMutation.swift */; };
+		F0F7E02E24E368B500313C7F /* StringError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E02D24E368B500313C7F /* StringError.swift */; };
+		F0F7E03124E3724F00313C7F /* AddPersonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E03024E3724F00313C7F /* AddPersonViewModel.swift */; };
+		F0F7E03324E3726200313C7F /* AddPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E03224E3726200313C7F /* AddPersonViewController.swift */; };
+		F0F7E03524E3727100313C7F /* AddPerson.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0F7E03424E3727100313C7F /* AddPerson.storyboard */; };
+		F0F7E03724E37CF400313C7F /* TextFieldBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E03624E37CF400313C7F /* TextFieldBinding.swift */; };
+		F0F7E03924E3BC5200313C7F /* ComposableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E03824E3BC5200313C7F /* ComposableDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +76,15 @@
 		F0F7E01624E26BC200313C7F /* BindingSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingSupport.swift; sourceTree = "<group>"; };
 		F0F7E01824E2731100313C7F /* UIKitBindings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBindings.swift; sourceTree = "<group>"; };
 		F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewBinding.swift; sourceTree = "<group>"; };
+		F0F7E02724E3090E00313C7F /* PersonApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonApi.swift; sourceTree = "<group>"; };
+		F0F7E02924E30EB100313C7F /* Mutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mutation.swift; sourceTree = "<group>"; };
+		F0F7E02B24E311A100313C7F /* AddPersonMutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonMutation.swift; sourceTree = "<group>"; };
+		F0F7E02D24E368B500313C7F /* StringError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringError.swift; sourceTree = "<group>"; };
+		F0F7E03024E3724F00313C7F /* AddPersonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonViewModel.swift; sourceTree = "<group>"; };
+		F0F7E03224E3726200313C7F /* AddPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPersonViewController.swift; sourceTree = "<group>"; };
+		F0F7E03424E3727100313C7F /* AddPerson.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddPerson.storyboard; sourceTree = "<group>"; };
+		F0F7E03624E37CF400313C7F /* TextFieldBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldBinding.swift; sourceTree = "<group>"; };
+		F0F7E03824E3BC5200313C7F /* ComposableDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +124,7 @@
 				F0F7E02524E304BD00313C7F /* Library */,
 				F0F7E02424E3045F00313C7F /* API */,
 				F0B5056324DD93C9008C97BD /* Models */,
+				F0F7E02624E308A500313C7F /* Mutations */,
 				F0B5056424DD93D3008C97BD /* Views */,
 				F0B5053924DD92E0008C97BD /* AppDelegate.swift */,
 				F0B5053B24DD92E0008C97BD /* SceneDelegate.swift */,
@@ -137,6 +156,7 @@
 		F0B5056424DD93D3008C97BD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F0F7E02F24E3723E00313C7F /* AddPerson */,
 				F0F7E00F24E24D3300313C7F /* Person */,
 				F0B5056724DD949C008C97BD /* People */,
 			);
@@ -166,6 +186,7 @@
 		F0F7E02424E3045F00313C7F /* API */ = {
 			isa = PBXGroup;
 			children = (
+				F0F7E02724E3090E00313C7F /* PersonApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -173,12 +194,34 @@
 		F0F7E02524E304BD00313C7F /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				F027936924E2224600F72530 /* ViewModel.swift */,
 				F0F7E01624E26BC200313C7F /* BindingSupport.swift */,
-				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
+				F0F7E03824E3BC5200313C7F /* ComposableDelegate.swift */,
+				F0F7E02924E30EB100313C7F /* Mutation.swift */,
+				F0F7E02D24E368B500313C7F /* StringError.swift */,
 				F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */,
+				F0F7E03624E37CF400313C7F /* TextFieldBinding.swift */,
+				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
+				F027936924E2224600F72530 /* ViewModel.swift */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		F0F7E02624E308A500313C7F /* Mutations */ = {
+			isa = PBXGroup;
+			children = (
+				F0F7E02B24E311A100313C7F /* AddPersonMutation.swift */,
+			);
+			path = Mutations;
+			sourceTree = "<group>";
+		};
+		F0F7E02F24E3723E00313C7F /* AddPerson */ = {
+			isa = PBXGroup;
+			children = (
+				F0F7E03024E3724F00313C7F /* AddPersonViewModel.swift */,
+				F0F7E03224E3726200313C7F /* AddPersonViewController.swift */,
+				F0F7E03424E3727100313C7F /* AddPerson.storyboard */,
+			);
+			path = AddPerson;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,6 +288,7 @@
 				F0B5056F24DE1612008C97BD /* People.storyboard in Resources */,
 				F0B5055A24DD9340008C97BD /* Cartfile in Resources */,
 				F0F7E01524E24DCF00313C7F /* Person.storyboard in Resources */,
+				F0F7E03524E3727100313C7F /* AddPerson.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,13 +303,21 @@
 				F0B5056924DD94B1008C97BD /* PeopleViewController.swift in Sources */,
 				F0B5056B24DD94BF008C97BD /* PeopleViewModel.swift in Sources */,
 				F0F7E01724E26BC200313C7F /* BindingSupport.swift in Sources */,
+				F0F7E02C24E311A100313C7F /* AddPersonMutation.swift in Sources */,
+				F0F7E03724E37CF400313C7F /* TextFieldBinding.swift in Sources */,
 				F0F7E01124E24D6E00313C7F /* PersonViewModel.swift in Sources */,
 				F0B5053A24DD92E0008C97BD /* AppDelegate.swift in Sources */,
 				F0B5056624DD93ED008C97BD /* Person.swift in Sources */,
 				F0F7E01F24E27D8300313C7F /* TableViewBinding.swift in Sources */,
+				F0F7E02824E3090E00313C7F /* PersonApi.swift in Sources */,
+				F0F7E03924E3BC5200313C7F /* ComposableDelegate.swift in Sources */,
 				F0F7E01924E2731100313C7F /* UIKitBindings.swift in Sources */,
+				F0F7E03324E3726200313C7F /* AddPersonViewController.swift in Sources */,
+				F0F7E02A24E30EB100313C7F /* Mutation.swift in Sources */,
 				F027936A24E2224600F72530 /* ViewModel.swift in Sources */,
+				F0F7E02E24E368B500313C7F /* StringError.swift in Sources */,
 				F0F7E01324E24D7B00313C7F /* PersonViewController.swift in Sources */,
+				F0F7E03124E3724F00313C7F /* AddPersonViewModel.swift in Sources */,
 				F0B5053C24DD92E0008C97BD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+extension UIControl {
+    var isEnabledBinding: Binding<UIControl, Bool> { Binding(self, \.isEnabled) }
+}
+
 extension UILabel {
     var textBinding: Binding<UILabel, String?> { Binding(self, \.text) }
 }

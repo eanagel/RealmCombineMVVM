@@ -39,6 +39,12 @@ class PeopleViewController: UITableViewController {
         
         self.navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    @IBAction func addPerson(_ sender: Any) {
+        let viewController = AddPersonViewController.instantiate()
+        
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension PeopleViewModel.Item: BindableViewModelItem {

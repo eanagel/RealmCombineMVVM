@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qv0-fv-ews">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Add Person-->
+        <scene sceneID="wuS-z9-fyC">
+            <objects>
+                <viewController title="Add Person" id="qv0-fv-ews" customClass="AddPersonViewController" customModule="People" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VEe-OA-syN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3C3-7e-eMt">
+                                <rect key="frame" x="20" y="108" width="83" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="an4-vN-DVq">
+                                <rect key="frame" x="20" y="134" width="177" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3H-27-wEC">
+                                <rect key="frame" x="217" y="108" width="82" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CdA-1X-A1y">
+                                <rect key="frame" x="217" y="134" width="177" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LfP-TH-DrC">
+                                <rect key="frame" x="167.5" y="208" width="79" height="30"/>
+                                <state key="normal" title="Add Person"/>
+                                <connections>
+                                    <action selector="addPersonAction:" destination="qv0-fv-ews" eventType="touchUpInside" id="H3W-tO-mPW"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="3C3-7e-eMt" firstAttribute="top" secondItem="hdS-ge-G7j" secondAttribute="top" constant="20" id="792-iD-aPV"/>
+                            <constraint firstItem="CdA-1X-A1y" firstAttribute="top" secondItem="P3H-27-wEC" secondAttribute="bottom" constant="5" id="BU8-VV-lYH"/>
+                            <constraint firstItem="CdA-1X-A1y" firstAttribute="width" secondItem="an4-vN-DVq" secondAttribute="width" id="Cye-nk-cea"/>
+                            <constraint firstItem="3C3-7e-eMt" firstAttribute="leading" secondItem="hdS-ge-G7j" secondAttribute="leading" constant="20" id="Joa-dS-S1I"/>
+                            <constraint firstItem="an4-vN-DVq" firstAttribute="top" secondItem="3C3-7e-eMt" secondAttribute="bottom" constant="5" id="PFj-2B-v8J"/>
+                            <constraint firstItem="LfP-TH-DrC" firstAttribute="top" secondItem="an4-vN-DVq" secondAttribute="bottom" constant="40" id="TKz-sQ-dPw"/>
+                            <constraint firstItem="hdS-ge-G7j" firstAttribute="trailing" secondItem="CdA-1X-A1y" secondAttribute="trailing" constant="20" id="Vx1-3R-yr7"/>
+                            <constraint firstItem="CdA-1X-A1y" firstAttribute="leading" secondItem="an4-vN-DVq" secondAttribute="trailing" constant="20" id="Zyt-wm-aKy"/>
+                            <constraint firstItem="LfP-TH-DrC" firstAttribute="centerX" secondItem="VEe-OA-syN" secondAttribute="centerX" id="qdU-7r-BWg"/>
+                            <constraint firstItem="P3H-27-wEC" firstAttribute="top" secondItem="hdS-ge-G7j" secondAttribute="top" constant="20" id="vem-b2-jk3"/>
+                            <constraint firstItem="an4-vN-DVq" firstAttribute="leading" secondItem="hdS-ge-G7j" secondAttribute="leading" constant="20" id="xmc-LT-hN7"/>
+                            <constraint firstItem="CdA-1X-A1y" firstAttribute="leading" secondItem="P3H-27-wEC" secondAttribute="leading" id="zDk-VS-3OX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hdS-ge-G7j"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="addPersonButton" destination="LfP-TH-DrC" id="9EM-0s-i1V"/>
+                        <outlet property="firstNameLabel" destination="an4-vN-DVq" id="Ubg-Ib-lXV"/>
+                        <outlet property="lastNameLabel" destination="CdA-1X-A1y" id="7QD-2A-tbc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fcu-yb-mMM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131.8840579710145" y="138.61607142857142"/>
+        </scene>
+    </scenes>
+</document>

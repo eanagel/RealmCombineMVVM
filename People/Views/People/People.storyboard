@@ -22,7 +22,7 @@
             </objects>
             <point key="canvasLocation" x="-814" y="145"/>
         </scene>
-        <!--People View Controller-->
+        <!--People (6)-->
         <scene sceneID="2yy-I3-xb2">
             <objects>
                 <tableViewController id="AYP-m4-iQl" customClass="PeopleViewController" customModule="People" customModuleProvider="target" sceneMemberID="viewController">
@@ -54,7 +54,13 @@
                             <outlet property="delegate" destination="AYP-m4-iQl" id="FKH-MJ-Bef"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="aVc-A1-F94"/>
+                    <navigationItem key="navigationItem" title="People (6)" id="aVc-A1-F94">
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="LVl-On-dBj">
+                            <connections>
+                                <action selector="addPerson:" destination="AYP-m4-iQl" id="Yyc-Xx-Dog"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NJZ-FL-n4v" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
