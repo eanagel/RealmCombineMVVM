@@ -12,74 +12,22 @@ import RealmSwift
 
 extension Publisher {
     public func mapRealmCollectionChanges<Source, Target, OutputType: RandomAccessCollection>(_ mapElement: @escaping (Source) -> Target, applyModifications: Bool = true) -> AnyPublisher<RealmCollectionChange<[Target]>, Failure> where Output == RealmCollectionChange<OutputType>, OutputType.Element == Source, OutputType.Index == Int {
-        
-        // something like this should allow us to update the array without mapping the results each time...
-        // this will be required to support applyModifications == false
-        
-//        return self.reduce(RealmCollectionChange<[Target]>.initial([])) { (last, source) in
-//            var items: [Target] = {
-//                switch(last) {
-//                case .initial(let items):
-//                    return items
-//                case .update(let items, deletions: _, insertions: _, modifications: _):
-//                    return items
-//                case .error:
-//                    return []
-//                }
-//            }()
-//
-//            switch(source) {
-//            case .initial(let sourceItems):
-//                Swift.print("mapChanges: mapping initial items")
-//                items = Array(sourceItems.map(mapElement))
-//                return .initial(items)
-//
-//            case .update(let sourceItems, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-//                // apply changes to our items...
-//
-//                Swift.print("mapChanges: mapping deletions: \(deletions), insertions: \(insertions), modifications: \(modifications)")
-//
-//                for index in deletions.sorted().reversed() {
-//                    items.remove(at: index)
-//                }
-//
-//                for index in insertions.sorted() {
-//                    items.insert(mapElement(sourceItems[index]), at: index)
-//                }
-//
-//                if (applyModifications) {
-//                    for index in modifications.sorted() {
-//                        items[index] = mapElement(sourceItems[index])
-//                    }
-//                }
-//
-//                return .update(items, deletions: deletions, insertions: insertions, modifications: (applyModifications) ? modifications : [])
-//
-//            case .error(let e):
-//                Swift.print("mapChanges: mapping error \(e)")
-//                return .error(e)
-//            }
-//        }.eraseToAnyPublisher()
-
         guard applyModifications == true else {
             fatalError("applyModifications == false is not currently supported.")
+            // to support this correctly we need to keeo the active list of items and make the updates to it as indicated, ignoring
+            // updates. Making map stateful is problematic, so an apporach using reduce() may work, allowing us to work off of the previous
+            // list of items..
         }
         
         return self.map { (source) -> RealmCollectionChange<[Target]> in
             switch(source) {
             case .initial(let sourceItems):
-                Swift.print("mapChanges: mapping initial items")
                 return .initial(Array(sourceItems.map(mapElement)))
                 
             case .update(let sourceItems, deletions: let deletions, insertions: let insertions, modifications: let modifications):
-                // apply changes to our items...
-                
-                Swift.print("mapChanges: mapping deletions: \(deletions), insertions: \(insertions), modifications: \(modifications)")
-                
                 return .update(Array(sourceItems.map(mapElement)), deletions: deletions, insertions: insertions, modifications: (applyModifications) ? modifications : [])
                 
             case .error(let e):
-                Swift.print("mapChanges: mapping error \(e)")
                 return .error(e)
             }
         }.eraseToAnyPublisher()
