@@ -15,13 +15,15 @@ import RealmSwift
 class PeopleViewController: UITableViewController {
     typealias VM = PeopleViewModel
     
+    @IBOutlet var staticCell: PeopleViewControllerStaticCell!
+    
     var bindings: BindingGroup?
     lazy var viewModel = PeopleViewModel()
     
     func bind() {
         bindings = BindingGroup {
             self.titleBinding *= viewModel.title
-            self.tableView *= self.viewModel.items
+            self.tableView *= [.items(staticCell), .items(self.viewModel.items)]
         }
     }
     
@@ -63,4 +65,7 @@ class PeopleViewControllerCell: UITableViewCell, BindableView {
         id = item.id
         self.textLabel?.text = item.name
     }
+}
+
+class PeopleViewControllerStaticCell: UITableViewCell {
 }

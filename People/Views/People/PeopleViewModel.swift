@@ -23,7 +23,7 @@ class PeopleViewModel {
             .sorted(by: ["firstName", "lastName"])
             .asItemArray()
         
-        self.title = self.items.map({ "People (\($0.count))" }).eraseToAnyPublisher()
+        self.title = self.items.currentValuePublisher.map({ "People (\($0.count))" }).eraseToAnyPublisher()
     }
 }
 
