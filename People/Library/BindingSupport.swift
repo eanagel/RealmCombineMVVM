@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 func *= <O, T, P>(lhs: Binding<O, T>, rhs: P) where P: Publisher, P.Output == T {
     BindingGroup.add(rhs.sink(lhs))
@@ -54,12 +55,13 @@ extension Publisher {
     }
 }
 
-class BindingGroup {
+
+public class BindingGroup {
     private var items = Set<AnyCancellable>()
     
-    static var current: BindingGroup? = nil
+    public static var current: BindingGroup? = nil
     
-    func capture<T>(_ block: () -> T) -> T {
+    public func capture<T>(_ block: () -> T) -> T {
         let temp = BindingGroup.current
         BindingGroup.current = self
         
@@ -70,15 +72,41 @@ class BindingGroup {
         return result
     }
     
-    func add(_ binding: AnyCancellable) {
-        items.insert(binding)
+    public func add(_ object: AnyObject) {
+        
+        let cancellable: AnyCancellable = {
+            
+            // if object is already AnyCancellable, then we are all set...
+            
+            if let cancellable = object as? AnyCancellable {
+                return cancellable
+            }
+            
+            // if we respond to the Cancellable protocol, go ahead and wrap in AnyCancellable...
+            
+            if let cancellable = object as? Cancellable {
+                return AnyCancellable { cancellable.cancel() }
+            }
+            
+            // Otherwise wrap an arbitrary value in AnyCancellable...
+            // We are using retained to create a retain cycle that matches the lifetime of the
+            // AnyCancellable.
+            
+            var retained: AnyObject? = object
+            
+            let cancellable = AnyCancellable {
+                if (retained != nil) {
+                    retained = nil
+                }
+            }
+            
+            return cancellable
+        }()
+        
+        items.insert(cancellable)
     }
-    
-    func clear() {
-        items.removeAll()
-    }
-
-    static func add(_ binding: AnyCancellable) {
+        
+    public static func add(_ binding: AnyObject) {
         guard let current = BindingGroup.current else {
             fatalError("Bindings must be in a capture group")
         }
@@ -86,23 +114,17 @@ class BindingGroup {
         current.add(binding)
     }
     
-    init() {
+    public func clear() {
+        items.removeAll()
+    }
+
+    public init() {
     }
     
-    init(_ block: () -> Void) {
+    public init(_ block: () -> Void) {
         capture(block)
     }
 }
-
-protocol BindingGroupProtocol { }
-
-extension BindingGroupProtocol where Self: BindingGroup {
-    static func add(_ binding: Cancellable) {
-        Self.add(AnyCancellable({ binding.cancel() }))
-    }
-}
-
-extension BindingGroup: BindingGroupProtocol { }
 
 public protocol BindableView {
     associatedtype Element
