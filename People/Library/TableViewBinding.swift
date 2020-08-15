@@ -74,11 +74,11 @@ public class TableViewBindingBase: ComposableDelegate<UITableViewDataSource>, UI
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return self.nextDelegate?.tableView(tableView, numberOfRowsInSection: section) ?? 0
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        return self.nextDelegate?.tableView(tableView, cellForRowAt: indexPath) ?? UITableViewCell()
     }
 }
 
@@ -235,6 +235,58 @@ extension TableViewSectionBinding {
     }
 }
 
+extension TableViewSectionBinding {
+    private class HeaderTitle: TableViewSectionBinding {
+        let title: String?
+        
+        init(_ title: String?, nextDelegate: UITableViewDataSource? = nil) {
+            self.title = title
+            super.init(nextDelegate: nextDelegate)
+        }
+        
+        func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+            guard section == self.section else {
+                return self.nextDelegate?.tableView?(tableView, titleForHeaderInSection: section)
+            }
+            
+            return title
+        }
+    }
+    
+    private class FooterTitle: TableViewSectionBinding {
+        let title: String?
+        
+        init(_ title: String?, nextDelegate: UITableViewDataSource? = nil) {
+            self.title = title
+            super.init(nextDelegate: nextDelegate)
+        }
+        
+        func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+            guard section == self.section else {
+                return self.nextDelegate?.tableView?(tableView, titleForFooterInSection: section)
+            }
+            
+            return title
+        }
+    }
+    
+    public static func headerTitle(_ title: String?) -> TableViewSectionBinding {
+        return HeaderTitle(title)
+    }
+    
+    public func headerTitle(_ title: String?) -> TableViewSectionBinding {
+        return HeaderTitle(title, nextDelegate: self)
+    }
+    
+    public static func footerTitle(_ title: String?) -> TableViewSectionBinding {
+        return FooterTitle(title)
+    }
+    
+    public func footerTitle(_ title: String?) -> TableViewSectionBinding {
+        return FooterTitle(title, nextDelegate: self)
+    }
+}
+
 public class TableViewBinding: TableViewBindingBase {
 }
 
@@ -367,7 +419,7 @@ extension TableViewBinding {
             return self.sections.count
         }
         
-        private func forward<T>(_ section: Int, _ action: (UITableViewDataSource) -> T) -> T {
+        fileprivate func forward<T>(_ section: Int, _ action: (UITableViewDataSource) -> T) -> T {
             return action(self.sections[section])
         }
         

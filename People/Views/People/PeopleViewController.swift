@@ -23,7 +23,7 @@ class PeopleViewController: UITableViewController {
     func bind() {
         bindings = BindingGroup {
             self.titleBinding *= viewModel.title
-            self.tableView *= [.items(staticCell), .items(self.viewModel.items)]
+            self.tableView *= [.items(staticCell), TableViewSectionBinding.items(self.viewModel.items).headerTitle("People List (Header Title)")]
         }
     }
     
