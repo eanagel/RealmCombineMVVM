@@ -23,7 +23,14 @@ class PeopleViewController: UITableViewController {
     func bind() {
         bindings = BindingGroup {
             self.titleBinding *= viewModel.title
-            self.tableView *= [.items(staticCell), TableViewSectionBinding.items(self.viewModel.items).headerTitle("People List (Header Title)")]
+            
+            let itemsSection = TableViewSectionBinding
+                .items(self.viewModel.items)
+                .headerTitle("People List (Header Title)")
+                .didSelectRow(self.didSelectRow)
+                .automaticRowHeight()
+            
+            self.tableView *= TableViewBinding.sections(.items(staticCell), itemsSection)
         }
     }
     
@@ -31,8 +38,8 @@ class PeopleViewController: UITableViewController {
         super.viewDidLoad()
         bind()
     }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    func didSelectRow(_ indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let item = self.viewModel.items[indexPath.row]
@@ -42,6 +49,10 @@ class PeopleViewController: UITableViewController {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
     @IBAction func addPerson(_ sender: Any) {
         let viewController = AddPersonViewController.instantiate()
         

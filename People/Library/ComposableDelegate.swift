@@ -8,6 +8,10 @@
 
 import Foundation
 
+
+/// Allows "composing" a NSObject-based delegate by aggregating small classes together. Each ComposableDelegate
+/// has a "nextDelegate" method that may implement delegate methods not implemented by the current ComposableDelegate.
+/// You can use this class to chain delegates using a "fluent" style syntax.
 public class ComposableDelegate<Delegate: NSObjectProtocol>: NSObject {
     public let nextDelegate: Delegate?
     
