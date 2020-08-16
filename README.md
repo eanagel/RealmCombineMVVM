@@ -8,7 +8,7 @@ native observation system is provides `Combine` `Publishers` that we use. Querie
 animate updates. We use the latter, `changeSetPublisher`. Additionally, we have added an extension to `Object` that allows you to observe a single property, `.propertyValuePublisher()`.
 This is very handy when propagating changes from your Model to your ViewModel.
 
-## View Model Support
+## ViewModel Support
 
 Ideally your ViewModel is primarily a mapping layer, transforming data and changes from your Models into a clean representation of what your Views will display.
 In addition to the `propertyValuePublisher` discussed above, the `ViewModelItemArray` makes this job much easier. 
@@ -41,7 +41,23 @@ like the following:
         }
     }
     
-    `items` can be easily bound to a `TableViewSectionBinding` which will track changes and perform them imteractively.
+`items` can be easily bound to a `TableViewSectionBinding` which will track changes and perform them imteractively.
+
+### Updating ViewModel State
+
+While most Data Binding involves pushing data from your View Model into your view, there are times when the ViewModel needs state from the UI. On the ViewModel side, you will usually want to use a `CurrentValueSubject`. This gives you access to the current value as well as allowing you to subscribe to changes. In your view you can simply update the values using the `.value` on the `CurrentValueSubject` or use data binding support for updating values.
+
+### Validation
+
+When state is coming into your view model you may need to have some kind of validation code. This may be to let View know when it is safe to commit changes or other state and validation information. This can be accomplished by using `CombineLatest` and `.map` to produce output values, as in the following:
+
+        let firstName = CurrentValueSubject<String, Never>("")
+        let lastName = CurrentValueSubject<String, Never>("")
+
+        lazy var canAddPerson = Publishers.CombineLatest(self.firstName, self.lastName).map({ !$0.0.isEmpty && !$0.1.isEmpty }).eraseToAnyPublisher()
+        
+Note that while validation libraries exist, they tend to push validation out to the View layer which violates the basic principle of MVVM (business logic shouldn't be embedded in the View.) 
+Generally speaking. validation logic should be handled in the ViewModel (using Combine in our case) and presented in the View.
 
 ## Data Binding Support
 
@@ -88,8 +104,23 @@ The third is the binding operator, `*=`. There are couple flavors of this operat
 
 2. add the sink to the current `BindingGroup`
 
-That's about all there is to it! Well, there are some special versions of the bind operator to support UITableViews and we also have some 
+That's about all there is to it! Well, there are some special versions of the bind operator to support UITableViews and we also have some support for binding values back to the
+ViewModel.
 
+### Publishing data to the view model (Handling Inputs)
+
+Inputs for ViewModels will be presented as some kind of `Subject`, which will often be a `CurrentValueSubject`. The View may explicitly update the value using `.send(value)`
+To make this more declarative, bindings may be set-up for this reverse relationship as well. This has been done for `UITextField`s, using `TextFieldBinding`.
+
+`TextFieldBinding` creates a delegate for a `UITextField` that can update a `Subject` as the user types. If a value is defined in the ViewModel as:
+
+    let firstName = CurrentValueSubject<String, Never>("")
+    
+The View layer can bind to it using the following:
+
+    self.firstNameLabel *= TextFieldBinding.subject(viewModel.firstName).nextField(self.lastNameLabel)
+    
+Additionally, we are telling the `TextFieldBinding` to use `self.lastNameLabel` as the "next field" using `TextFieldBinding`'s Composable Delegate support, see below.
 
 ## Composable Delegates
 
