@@ -362,7 +362,6 @@ extension TableViewSectionBinding { // Row Height
         }
     }
     
-    
     /// executes action to determine the row height for the cell
     /// - Parameter action: an action that returns a cell height (including UITableView.automaticDimension)
     /// - Returns: a new instance ot TableViewSectionBinding

@@ -20,10 +20,17 @@ class PersonViewController: UIViewController {
     
     func bind() {
         bindings = BindingGroup {
-            self.titleBinding *= viewModel.fullName
-            self.firstName.textBinding *= viewModel.firstName
-            self.lastName.textBinding *= viewModel.lastName
+            titleBinding *= viewModel.fullName
+            firstName.textBinding *= viewModel.firstName
+            lastName.textBinding *= viewModel.lastName
         }
+        
+        var bindings = Set<AnyCancellable>()
+        
+        viewModel.firstName.sink(receiveValue: { self.firstName.text = $0 }).store(in: &bindings)
+        viewModel.lastName.sink(receiveValue: { self.lastName.text = $0 }).store(in: &bindings)
+        
+        
     }
     
     override func viewDidLoad() {

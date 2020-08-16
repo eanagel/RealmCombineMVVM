@@ -14,8 +14,6 @@ class PeopleViewModel {
     let title: AnyPublisher<String, Never>
     let items: ViewModelItemArray<Item>
     
-    var bindings = Set<AnyCancellable>()
-    
     init() {
         let realm = try! Realm()
 
