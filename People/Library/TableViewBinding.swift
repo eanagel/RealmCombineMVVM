@@ -21,7 +21,7 @@ public func *=(_ lhs: UITableView, _ rhs: TableViewSectionBinding) {
     BindingGroup.add(rhs)
 }
 
-public func *=<Element: BindableViewModelItem>(_ lhs: UITableView, _ rhs: ViewModelItemArray<Element>) where Element.View: UITableViewCell {
+public func *=<Element: BindableViewModelItem, RHS: ObservableArray>(_ lhs: UITableView, _ rhs: RHS) where RHS.Element == Element, Element.View: UITableViewCell {
     lhs *= TableViewSectionBinding.items(rhs)
 }
 
@@ -230,9 +230,9 @@ extension TableViewSectionBinding {
     }
     
     /// Dynamically binds to changes in items ViewModelArray wherethe elements conform to BindableViewModelItem
-    /// - Parameter items: a ViewModelItemArray of items to bindto
+    /// - Parameter items: an ObservableArray of items to bind to
     /// - Returns: a dynamic TableViewSectionBinding for the published items
-    public static func items<Element: BindableViewModelItem>(_ items: ViewModelItemArray<Element>) -> TableViewSectionBinding where Element.View: UITableViewCell {
+    public static func items<Element: BindableViewModelItem, I: ObservableArray>(_ items: I) -> TableViewSectionBinding where I.Element == Element, Element.View: UITableViewCell {
         return Items(items.changeSetPublisher)
     }
     

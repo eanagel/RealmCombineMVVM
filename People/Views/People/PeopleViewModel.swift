@@ -12,25 +12,25 @@ import RealmSwift
 
 class PeopleViewModel {
     let title: AnyPublisher<String, Never>
-    let items: ViewModelItemArray<Item>
+    let items: AnyObservableArray<Item>
     
     init() {
         let realm = try! Realm()
 
         self.items = realm.objects(Person.self)
             .sorted(by: ["firstName", "lastName"])
-            .asItemArray()
+            .asObservableArray()
         
         self.title = self.items.currentValuePublisher.map({ "People (\($0.count))" }).eraseToAnyPublisher()
     }
 }
 
 extension PeopleViewModel {
-    class Item: ViewModelItem {
+    struct Item: ViewModelItem {
         let id: String
         let name: String
         
-        required init(_ person: Person) {
+        init(_ person: Person) {
             id = person.id
             name = "\(person.firstName) \(person.lastName)"
         }

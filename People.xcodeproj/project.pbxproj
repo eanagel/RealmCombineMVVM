@@ -22,7 +22,7 @@
 		F0B5056B24DD94BF008C97BD /* PeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5056A24DD94BF008C97BD /* PeopleViewModel.swift */; };
 		F0B5056D24DE08D9008C97BD /* RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5056C24DE08D9008C97BD /* RealmConfig.swift */; };
 		F0B5056F24DE1612008C97BD /* People.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0B5056E24DE1612008C97BD /* People.storyboard */; };
-		F0D0DDFA24E70BAE00BAA38E /* ViewModelItemArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D0DDF924E70BAE00BAA38E /* ViewModelItemArray.swift */; };
+		F0D0DDFA24E70BAE00BAA38E /* ObservableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D0DDF924E70BAE00BAA38E /* ObservableArray.swift */; };
 		F0D0DDFC24E8BE9800BAA38E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F0D0DDFB24E8BE9800BAA38E /* README.md */; };
 		F0F7E01124E24D6E00313C7F /* PersonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E01024E24D6E00313C7F /* PersonViewModel.swift */; };
 		F0F7E01324E24D7B00313C7F /* PersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F7E01224E24D7B00313C7F /* PersonViewController.swift */; };
@@ -72,7 +72,7 @@
 		F0B5056A24DD94BF008C97BD /* PeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewModel.swift; sourceTree = "<group>"; };
 		F0B5056C24DE08D9008C97BD /* RealmConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmConfig.swift; sourceTree = "<group>"; };
 		F0B5056E24DE1612008C97BD /* People.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = People.storyboard; sourceTree = "<group>"; };
-		F0D0DDF924E70BAE00BAA38E /* ViewModelItemArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelItemArray.swift; sourceTree = "<group>"; };
+		F0D0DDF924E70BAE00BAA38E /* ObservableArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableArray.swift; sourceTree = "<group>"; };
 		F0D0DDFB24E8BE9800BAA38E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F0F7E01024E24D6E00313C7F /* PersonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonViewModel.swift; sourceTree = "<group>"; };
 		F0F7E01224E24D7B00313C7F /* PersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonViewController.swift; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 				F0F7E03624E37CF400313C7F /* TextFieldBinding.swift */,
 				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
 				F027936924E2224600F72530 /* ViewModel.swift */,
-				F0D0DDF924E70BAE00BAA38E /* ViewModelItemArray.swift */,
+				F0D0DDF924E70BAE00BAA38E /* ObservableArray.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -315,7 +315,7 @@
 				F0F7E01124E24D6E00313C7F /* PersonViewModel.swift in Sources */,
 				F0B5053A24DD92E0008C97BD /* AppDelegate.swift in Sources */,
 				F0B5056624DD93ED008C97BD /* Person.swift in Sources */,
-				F0D0DDFA24E70BAE00BAA38E /* ViewModelItemArray.swift in Sources */,
+				F0D0DDFA24E70BAE00BAA38E /* ObservableArray.swift in Sources */,
 				F0F7E01F24E27D8300313C7F /* TableViewBinding.swift in Sources */,
 				F0F7E02824E3090E00313C7F /* PersonApi.swift in Sources */,
 				F0F7E03924E3BC5200313C7F /* ComposableDelegate.swift in Sources */,

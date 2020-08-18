@@ -11,23 +11,23 @@ This is very handy when propagating changes from your Model to your ViewModel.
 ## ViewModel Support
 
 Ideally your ViewModel is primarily a mapping layer, transforming data and changes from your Models into a clean representation of what your Views will display.
-In addition to the `propertyValuePublisher` discussed above, the `ViewModelItemArray` makes this job much easier. 
+In addition to the `propertyValuePublisher` discussed above, the `ObservableArray` makes this job much easier. 
 
-The `ViewModelItemArray` performs a couple roles. First, it gives you an easy way to map your Models into observable ViewModel Items. It then publishes the changes for you
+The `ObservableArray` performs a couple roles. First, it gives you an easy way to map your Models into observable ViewModel Items. It then publishes the changes for you
 so they can be easily bound to  `TableViewSectionBinding.items`. Additinally, the current array of mapped items is always available and there is a `Publisher` that publishes
 the current value of the array (instead of the changes.) If your ViewModel Item conforms to `ViewModelItem`, then `ViewModelItemArray` can create your ViewModel Items from
-the Models without any explicit mapping code. Realm's `Result` has an extension that will return an `ViewModelItemArray`, `.asItemArray()`. In the end it allows to create code 
+the Models without any explicit mapping code. Realm's `Result` has an extension that will return an `ObservableArray`, `.asItemArray()`. In the end it allows to create code 
 like the following:
 
     class PeopleViewModel {
-        let items: ViewModelItemArray<Item>
+        let items: AnyObservableArray<Item>
         
         init() {
             let realm = try! Realm()
 
             self.items = realm.objects(Person.self)
                 .sorted(by: ["firstName", "lastName"])
-                .asItemArray()
+                .asObservableArray()
         }
 
         class Item: ViewModelItem {
@@ -41,7 +41,7 @@ like the following:
         }
     }
     
-`items` can be easily bound to a `TableViewSectionBinding` which will track changes and perform them imteractively.
+`items` can be easily bound to a `TableViewSectionBinding` which will track changes and perform them interactively. Here we are creating an `ObservableArray` bound to 
 
 ### Updating ViewModel State
 
@@ -57,16 +57,16 @@ When state is coming into your view model you may need to have some kind of vali
         lazy var canAddPerson = Publishers.CombineLatest(self.firstName, self.lastName).map({ !$0.0.isEmpty && !$0.1.isEmpty }).eraseToAnyPublisher()
         
 Note that while validation libraries exist, they tend to push validation out to the View layer which violates the basic principle of MVVM (business logic shouldn't be embedded in the View.) 
-Generally speaking. validation logic should be handled in the ViewModel (using Combine in our case) and presented in the View.
+Generally speaking, validation logic should be handled in the ViewModel (using Combine in our case) and presented in the View.
 
 ## Data Binding Support
 
-In order to make data binding from the ViewModel to the View cleaner and simpler a data binding operator has been introduced: `*=` (pronounced "binds to"). In general the left hand side
+In order to make data binding from the ViewModel to the View cleaner and simpler a data binding operator has been introduced: `*=` (pronounced "binds to"). The left hand side
 of the bind operator is receiving data from the right hand side. Generally speaking, it allows binding Publishers to UIKit values, although there is additional support for UITableView 
-(See Table View Binding.)
+(See Table View Binding) as well as binding values back to the ViewModel.
 
 The easiest way to understand what is happening is to start with how data binding with Combine might be done using existing API's. You might use the following to bind first and last
-name Publishers in your View Model to UILabels:
+name Publishers in your ViewModel to UILabel's text property:
 
         @IBOutlet weak var firstName: UILabel!
         @IBOutlet weak var lastName: UILabel!

@@ -16,6 +16,12 @@ public protocol ViewModelItem {
     init(_ model: Model)
 }
 
+/// Stateful ViewModelItems maintain their state and shouldn't be overwritten when updates are observed
+/// in the underlying model. Use this when you are using data binding between your Model and your
+/// ViewModelItem.
+public protocol StatefulViewModelItem: AnyObject, ViewModelItem {
+}
+
 protocol ObjectPropertyValuePublisher {
 }
 
