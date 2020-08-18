@@ -26,7 +26,7 @@ class PeopleViewModel {
 }
 
 extension PeopleViewModel {
-    struct Item: ViewModelItem {
+    struct Item: ViewModelItem { // This is an example of a stateless item
         let id: String
         let name: String
         

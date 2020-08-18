@@ -28,7 +28,7 @@ protocol ObjectPropertyValuePublisher {
 extension ObjectPropertyValuePublisher {
     /// Observes a single property on a realm object
     func propertyValuePublisher<T>(_ keyPath: KeyPath<Self, T>) -> AnyPublisher<T, Never> where Self: Object  {
-        return Combine.Publishers.Merge(Just(self[keyPath: keyPath]), self.objectWillChange.map({ self[keyPath: keyPath] })).eraseToAnyPublisher()
+        return Just(self[keyPath: keyPath]).append(self.objectWillChange.filter({ !self.isInvalidated }).map({ self[keyPath: keyPath] })).eraseToAnyPublisher()
     }
 }
 

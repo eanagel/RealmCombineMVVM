@@ -56,25 +56,19 @@ class AddPersonMutation: Mutation {
         
         let api = PersonApi()
                 
-        let call = api.addPerson(.init(firstName: firstName, lastName: lastName, phone: phone, email: email))
+        let call = api.addPerson(.init(id: localId, firstName: firstName, lastName: lastName, phone: phone, email: email))
             .tryMap({ (response) -> Person in
                 let realm = try Realm()
             
                 return try realm.write {
-                    guard let temp = realm.object(ofType: Person.self, forPrimaryKey: self.localId) else {
+                    guard let person = realm.object(ofType: Person.self, forPrimaryKey: self.localId) else {
                         throw "Person not found"
                     }
                     
-                    let person = Person()
-                    
-                    person.id = response.id
                     person.firstName = response.firstName
                     person.lastName = response.lastName
                     person.phone = response.phone
                     person.email = response.email
-                    
-                    realm.delete(temp)
-                    realm.add(person)
                     
                     return person
                 }

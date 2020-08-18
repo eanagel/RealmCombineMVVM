@@ -11,6 +11,7 @@ import Combine
 
 class PersonApi {
     struct AddPersonRequest: Codable {
+        let id: String
         let firstName: String
         let lastName: String
         let phone: String
@@ -32,7 +33,7 @@ class PersonApi {
         // wait a bit then send our response. note the "server" returns a new ID and updates the case of the request on response...
         return Future { (promise) in
             MutationManager.queue.asyncAfter(deadline: .now() + .seconds(3)) {
-                promise(.success(AddPersonResponse(id: UUID().uuidString, firstName: request.firstName.capitalized, lastName: request.lastName.capitalized, phone: request.phone, email: request.email.lowercased())))
+                promise(.success(AddPersonResponse(id: request.id, firstName: request.firstName.capitalized, lastName: request.lastName.capitalized, phone: request.phone, email: request.email.lowercased())))
             }
         }
         .eraseToAnyPublisher()
