@@ -78,16 +78,7 @@ extension Publisher {
     }
     
     public func currentValuePublisher<Element, OutputType:RandomAccessCollection>() -> AnyPublisher<[Element], Failure> where Output == RealmCollectionChange<OutputType>, OutputType.Element == Element {
-        return self.map { (changes) -> [Element] in
-            switch(changes) {
-            case .initial(let items):
-                return Array(items)
-            case .update(let items, deletions: _, insertions: _, modifications: _):
-                return Array(items)
-            case .error:
-                return []
-            }
-        }.eraseToAnyPublisher()
+        return self.map({ $0.value.map({ Array($0) }) ?? [] }).eraseToAnyPublisher()
     }
     
     public func diff<Element: Equatable>(initial: [Element] = []) -> AnyPublisher<RealmCollectionChange<[Element]>, Never> where Output == [Element], Failure == Never {

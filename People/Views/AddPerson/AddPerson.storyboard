@@ -15,61 +15,77 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3C3-7e-eMt">
-                                <rect key="frame" x="20" y="108" width="83" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="an4-vN-DVq">
-                                <rect key="frame" x="20" y="134" width="177" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3H-27-wEC">
-                                <rect key="frame" x="217" y="108" width="82" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CdA-1X-A1y">
-                                <rect key="frame" x="217" y="134" width="177" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LfP-TH-DrC">
-                                <rect key="frame" x="167.5" y="208" width="79" height="30"/>
-                                <state key="normal" title="Add Person"/>
-                                <connections>
-                                    <action selector="addPersonAction:" destination="qv0-fv-ews" eventType="touchUpInside" id="H3W-tO-mPW"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="CEu-c1-yrF">
+                                <rect key="frame" x="20" y="108" width="374" height="138"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GY0-CP-feD">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="34"/>
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="an4-vN-DVq">
+                                                <rect key="frame" x="0.0" y="0.0" width="177" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CdA-1X-A1y">
+                                                <rect key="frame" x="197" y="0.0" width="177" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Gender" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Y6n-5t-w2s">
+                                        <rect key="frame" x="0.0" y="54" width="374" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LfP-TH-DrC">
+                                        <rect key="frame" x="0.0" y="108" width="374" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Add Person">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="addPersonAction:" destination="qv0-fv-ews" eventType="touchUpInside" id="H3W-tO-mPW"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="3C3-7e-eMt" firstAttribute="top" secondItem="hdS-ge-G7j" secondAttribute="top" constant="20" id="792-iD-aPV"/>
-                            <constraint firstItem="CdA-1X-A1y" firstAttribute="top" secondItem="P3H-27-wEC" secondAttribute="bottom" constant="5" id="BU8-VV-lYH"/>
-                            <constraint firstItem="CdA-1X-A1y" firstAttribute="width" secondItem="an4-vN-DVq" secondAttribute="width" id="Cye-nk-cea"/>
-                            <constraint firstItem="3C3-7e-eMt" firstAttribute="leading" secondItem="hdS-ge-G7j" secondAttribute="leading" constant="20" id="Joa-dS-S1I"/>
-                            <constraint firstItem="an4-vN-DVq" firstAttribute="top" secondItem="3C3-7e-eMt" secondAttribute="bottom" constant="5" id="PFj-2B-v8J"/>
-                            <constraint firstItem="LfP-TH-DrC" firstAttribute="top" secondItem="an4-vN-DVq" secondAttribute="bottom" constant="40" id="TKz-sQ-dPw"/>
-                            <constraint firstItem="hdS-ge-G7j" firstAttribute="trailing" secondItem="CdA-1X-A1y" secondAttribute="trailing" constant="20" id="Vx1-3R-yr7"/>
-                            <constraint firstItem="CdA-1X-A1y" firstAttribute="leading" secondItem="an4-vN-DVq" secondAttribute="trailing" constant="20" id="Zyt-wm-aKy"/>
-                            <constraint firstItem="LfP-TH-DrC" firstAttribute="centerX" secondItem="VEe-OA-syN" secondAttribute="centerX" id="qdU-7r-BWg"/>
-                            <constraint firstItem="P3H-27-wEC" firstAttribute="top" secondItem="hdS-ge-G7j" secondAttribute="top" constant="20" id="vem-b2-jk3"/>
-                            <constraint firstItem="an4-vN-DVq" firstAttribute="leading" secondItem="hdS-ge-G7j" secondAttribute="leading" constant="20" id="xmc-LT-hN7"/>
-                            <constraint firstItem="CdA-1X-A1y" firstAttribute="leading" secondItem="P3H-27-wEC" secondAttribute="leading" id="zDk-VS-3OX"/>
+                            <constraint firstItem="hdS-ge-G7j" firstAttribute="trailing" secondItem="CEu-c1-yrF" secondAttribute="trailing" constant="20" id="nbm-0w-95i"/>
+                            <constraint firstItem="CEu-c1-yrF" firstAttribute="leading" secondItem="hdS-ge-G7j" secondAttribute="leading" constant="20" id="rZE-yY-O37"/>
+                            <constraint firstItem="CEu-c1-yrF" firstAttribute="top" secondItem="hdS-ge-G7j" secondAttribute="top" constant="20" id="xcM-Sm-C4x"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hdS-ge-G7j"/>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="addPersonButton" destination="LfP-TH-DrC" id="9EM-0s-i1V"/>
-                        <outlet property="firstNameLabel" destination="an4-vN-DVq" id="Ubg-Ib-lXV"/>
-                        <outlet property="lastNameLabel" destination="CdA-1X-A1y" id="7QD-2A-tbc"/>
+                        <outlet property="firstNameTextField" destination="an4-vN-DVq" id="DOA-WG-SIs"/>
+                        <outlet property="genderPickerView" destination="A44-bR-o9g" id="Ket-P5-dNy"/>
+                        <outlet property="genderTextField" destination="Y6n-5t-w2s" id="pby-sm-wAW"/>
+                        <outlet property="genderToolbar" destination="IpW-rB-RaC" id="Zv5-TI-MnP"/>
+                        <outlet property="lastNameTextField" destination="CdA-1X-A1y" id="2XI-oO-LyU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fcu-yb-mMM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="IpW-rB-RaC">
+                    <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="OWs-mY-uVf"/>
+                        <barButtonItem systemItem="done" id="ehv-Fz-pWI">
+                            <connections>
+                                <action selector="genderDoneEditing:" destination="qv0-fv-ews" id="1eO-P3-tno"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                </toolbar>
+                <pickerView contentMode="scaleToFill" id="A44-bR-o9g">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="162"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                </pickerView>
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="138.61607142857142"/>
         </scene>

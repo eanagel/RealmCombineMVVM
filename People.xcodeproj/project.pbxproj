@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F027936A24E2224600F72530 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F027936924E2224600F72530 /* ViewModel.swift */; };
+		F069D9B224EBBAF40013A083 /* PickerViewBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F069D9B124EBBAF40013A083 /* PickerViewBinding.swift */; };
 		F0B5053A24DD92E0008C97BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5053924DD92E0008C97BD /* AppDelegate.swift */; };
 		F0B5053C24DD92E0008C97BD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B5053B24DD92E0008C97BD /* SceneDelegate.swift */; };
 		F0B5054324DD92E2008C97BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0B5054224DD92E2008C97BD /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 
 /* Begin PBXFileReference section */
 		F027936924E2224600F72530 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		F069D9B124EBBAF40013A083 /* PickerViewBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewBinding.swift; sourceTree = "<group>"; };
 		F0B5053624DD92E0008C97BD /* People.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = People.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0B5053924DD92E0008C97BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0B5053B24DD92E0008C97BD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -202,12 +204,13 @@
 				F0F7E01624E26BC200313C7F /* BindingSupport.swift */,
 				F0F7E03824E3BC5200313C7F /* ComposableDelegate.swift */,
 				F0F7E02924E30EB100313C7F /* Mutation.swift */,
+				F0D0DDF924E70BAE00BAA38E /* ObservableArray.swift */,
+				F069D9B124EBBAF40013A083 /* PickerViewBinding.swift */,
 				F0F7E02D24E368B500313C7F /* StringError.swift */,
 				F0F7E01E24E27D8300313C7F /* TableViewBinding.swift */,
 				F0F7E03624E37CF400313C7F /* TextFieldBinding.swift */,
 				F0F7E01824E2731100313C7F /* UIKitBindings.swift */,
 				F027936924E2224600F72530 /* ViewModel.swift */,
-				F0D0DDF924E70BAE00BAA38E /* ObservableArray.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				F0D0DDFA24E70BAE00BAA38E /* ObservableArray.swift in Sources */,
 				F0F7E01F24E27D8300313C7F /* TableViewBinding.swift in Sources */,
 				F0F7E02824E3090E00313C7F /* PersonApi.swift in Sources */,
+				F069D9B224EBBAF40013A083 /* PickerViewBinding.swift in Sources */,
 				F0F7E03924E3BC5200313C7F /* ComposableDelegate.swift in Sources */,
 				F0F7E01924E2731100313C7F /* UIKitBindings.swift in Sources */,
 				F0F7E03324E3726200313C7F /* AddPersonViewController.swift in Sources */,

@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import Combine
-
 import RealmSwift
 
 public typealias UITableViewDataSourceAndDelegate = UITableViewDataSource & UITableViewDelegate
@@ -47,7 +46,6 @@ public func *=<P: Publisher>(_ lhs: UITableView, _ rhs: P)  where P.Output == Re
 public func *=(_ lhs: UITableView, _ rhs: [TableViewSectionBinding]) {
     lhs *= TableViewBinding.sections(rhs)
 }
-
 
 /// Base class fort TableViewBinding and TableViewSectionBinding
 public class TableViewBindingBase: ComposableDelegate<UITableViewDataSourceAndDelegate>, UITableViewDataSourceAndDelegate, Cancellable {
@@ -130,9 +128,9 @@ extension TableViewSectionBinding {
     private class Items<Element>: TableViewSectionBinding {
         private var items: [Element]
         private let cellForItemAt: (UITableView, IndexPath, Element) -> UITableViewCell
-        private var bindings = Set<AnyCancellable>()
+        private var binding: AnyCancellable?
         
-        init<P>(_ publisher: P, cellForItem: @escaping (UITableView, IndexPath, Element) -> UITableViewCell, nextDelegate: UITableViewDataSourceAndDelegate? = nil) where P: Publisher, P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+        init<P: Publisher>(_ publisher: P, cellForItem: @escaping (UITableView, IndexPath, Element) -> UITableViewCell, nextDelegate: UITableViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
             self.items = []
             self.cellForItemAt = cellForItem
             
@@ -141,7 +139,7 @@ extension TableViewSectionBinding {
             self.onInitialized { [weak self] in
                 guard let self = self else { return }
                 
-                publisher.sink { [weak self] (changes) in
+                self.binding = publisher.sink { [weak self] (changes) in
                     guard let self = self, let tableView = self.tableView else { return }
                     let section = self.section
 
@@ -160,7 +158,7 @@ extension TableViewSectionBinding {
                     case .error:
                         break
                     }
-                }.store(in: &self.bindings)
+                }
             }
         }
         
@@ -190,7 +188,8 @@ extension TableViewSectionBinding {
         }
         
         override public func cancel() {
-            bindings.removeAll()
+            binding?.cancel()
+            binding = nil
             super.cancel()
         }
         

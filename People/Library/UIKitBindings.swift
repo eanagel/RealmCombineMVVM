@@ -20,3 +20,7 @@ extension UILabel {
 extension UIViewController {
     var titleBinding: Binding<UIViewController, String?> { Binding(self, \.title) }
 }
+
+extension UITextField {
+    var textBinding: Binding<UITextField, String?> { Binding(self, \.text) }
+}

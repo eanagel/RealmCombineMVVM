@@ -16,13 +16,15 @@ class AddPersonMutation: Mutation {
     let lastName: String
     let phone: String
     let email: String
+    let gender: Gender
         
-    init(firstName: String, lastName: String, phone: String, email: String) {
+    init(firstName: String, lastName: String, phone: String, email: String, gender: Gender) {
         self.firstName = firstName
         self.lastName = lastName
         self.phone = phone
         self.email = email
-        self.localId = "LOCAL:" + UUID().uuidString
+        self.gender = gender
+        self.localId =  UUID().uuidString
     }
 
     func start() throws {
@@ -35,6 +37,7 @@ class AddPersonMutation: Mutation {
             person.lastName = self.lastName
             person.phone = self.phone
             person.email = self.email
+            person.gender = self.gender
         
             realm.add(person)
         }
@@ -56,7 +59,7 @@ class AddPersonMutation: Mutation {
         
         let api = PersonApi()
                 
-        let call = api.addPerson(.init(id: localId, firstName: firstName, lastName: lastName, phone: phone, email: email))
+        let call = api.addPerson(.init(id: localId, firstName: firstName, lastName: lastName, phone: phone, email: email, gender: gender.rawValue))
             .tryMap({ (response) -> Person in
                 let realm = try Realm()
             
@@ -69,6 +72,7 @@ class AddPersonMutation: Mutation {
                     person.lastName = response.lastName
                     person.phone = response.phone
                     person.email = response.email
+                    person.gender = Gender(rawValue: response.gender) ?? .undisclosed
                     
                     return person
                 }
