@@ -111,183 +111,76 @@ public class PickerViewComponentBinding: PickerViewBindingBase {
     public var component: Int = 0 {
         didSet { (self.nextDelegate as? PickerViewComponentBinding)?.component = component }
     }
-    
-    public func eraseToAnyComponentBinding() -> PickerViewComponentBinding {
-        return PickerViewComponentBinding(nextDelegate: self)
-    }
 }
 
 extension PickerViewComponentBinding: Cancellable {
-    // Classes that implement UIPickerViewDataSource or Delegate methods cannot be generic
-    // In order to accomplish this we use a content provider along with generic constructors
-    // on the classes for each type.
-    
-    private class ContentProvider<Content> {
-        private let _contentForRow: (Int, Content?) -> Content?
-        private let _numberOfRows: () -> Int
-        private var _bindToPublisher: (() -> AnyCancellable)!
+    private class Items<Element, Content>: PickerViewComponentBinding {
+        private var items: [Element]
+        private let contentForElement: (Element, Content?) -> Content?
         private var binding: AnyCancellable?
-        public var onReloadComponent: (() -> Void)? {
-            didSet {
-                // bind to the publisher once onReloadComponent has been set
-                if binding == nil {
-                    binding = _bindToPublisher()
-                }
+
+        init<P: Publisher>(_ publisher: P, contentForElement: @escaping (Element, Content?) -> Content?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+            
+            self.items = []
+            self.contentForElement = contentForElement
+            super.init(nextDelegate: nextDelegate)
+            
+            self.binding = publisher.currentValuePublisher().sink { [weak self] (newItems) in
+                guard let self = self else { return }
+                
+                self.items = newItems
+                self.pickerView?.reloadComponent(self.component)
             }
         }
         
-        init<P: Publisher, Element>(_ publisher: P, contentForElement: @escaping (Element, Content?) -> Content?) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            var items: [Element] = []
-            
-            self._contentForRow = { contentForElement(items[$0], $1) }
-            self._numberOfRows = { items.count }
-            
-            self._bindToPublisher = {
-                return publisher.currentValuePublisher().sink { [weak self] (newItems) in
-                    guard let self = self else { return }
-                    
-                    items = newItems
-                    self.onReloadComponent?()
-                }
-            }
-        }
-        
-        convenience init<P: Publisher, Element>(_ publisher: P, contentForElement: @escaping (Element) -> Content?) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+        convenience init<P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> Content?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
             self.init(publisher, contentForElement: { (element, _) in contentForElement(element) })
         }
 
-        func cancel() {
+        override func cancel() {
             binding?.cancel()
             binding = nil
+            super.cancel()
         }
                 
         public func contentForRow(_ row: Int, reusing: Content? = nil) -> Content? {
-            return _contentForRow(row, reusing)
+            return contentForElement(items[row], reusing)
         }
         
-        public var numberOfRows: Int { _numberOfRows() }
+        // we can only override existing methods here, we cannot declare new ones...
+        
+        override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            return items.count
+        }
     }
     
-    private class StringItems: PickerViewComponentBinding {
-        private var contentProvider: ContentProvider<String>?
-        
-        init<P: Publisher, Element>(_ publisher: P, contentForElement: @escaping (Element) -> String?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = ContentProvider(publisher, contentForElement: contentForElement)
-            super.init(nextDelegate: nextDelegate)
-            
-            self.contentProvider?.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        init<P: Publisher, Element>(_ publisher: P, _ contentProvider: ContentProvider<String>, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = contentProvider
-            super.init(nextDelegate: nextDelegate)
-            
-            contentProvider.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        override func cancel() {
-            contentProvider?.cancel()
-            contentProvider = nil
-        }
-        
-        public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    private class StringItems<Element>: Items<Element, String> {
+        @objc func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
             guard component == self.component else {
                 return nextDelegate?.pickerView?(pickerView, titleForRow: row, forComponent: component)
             }
-            
-            return contentProvider?.contentForRow(row)
-        }
         
-        override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            contentProvider?.numberOfRows ?? 0
+            return contentForRow(row)
         }
     }
     
-    private class AttributedStringItems: PickerViewComponentBinding {
-        private var contentProvider: ContentProvider<NSAttributedString>?
-        
-        init<P: Publisher, Element>(_ publisher: P, contentForElement: @escaping (Element) -> NSAttributedString?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = ContentProvider(publisher, contentForElement: contentForElement)
-            super.init(nextDelegate: nextDelegate)
-            
-            self.contentProvider?.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        init<P: Publisher, Element>(_ publisher: P, _ contentProvider: ContentProvider<NSAttributedString>, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = contentProvider
-            super.init(nextDelegate: nextDelegate)
-            
-            contentProvider.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        override func cancel() {
-            contentProvider?.cancel()
-            contentProvider = nil
-        }
-        
-        public func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+    private class AttributedStringItems<Element>: Items<Element, NSAttributedString> {
+        @objc func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
             guard component == self.component else {
                 return nextDelegate?.pickerView?(pickerView, attributedTitleForRow: row, forComponent: component)
             }
             
-            return contentProvider?.contentForRow(row)
-        }
-        
-        override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            contentProvider?.numberOfRows ?? 0
+            return contentForRow(row)
         }
     }
     
-    private class ViewItems: PickerViewComponentBinding {
-        private var contentProvider: ContentProvider<UIView>?
-        
-        init<P: Publisher, Element>(_ publisher: P, contentForElement: @escaping (Element, UIView?) -> UIView?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = ContentProvider(publisher, contentForElement: contentForElement)
-            super.init(nextDelegate: nextDelegate)
-            
-            self.contentProvider?.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        init<P: Publisher, Element>(_ publisher: P, _ contentProvider: ContentProvider<UIView>, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.contentProvider = contentProvider
-            super.init(nextDelegate: nextDelegate)
-            
-            contentProvider.onReloadComponent = { [weak self] in
-                guard let self = self, let pickerView = self.pickerView else { return }
-                pickerView.reloadComponent(self.component)
-            }
-        }
-        
-        override func cancel() {
-            contentProvider?.cancel()
-            contentProvider = nil
-        }
-        
-        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    private class ViewItems<Element>: Items<Element, UIView> {
+        @objc func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
             guard component == self.component else {
                 return nextDelegate?.pickerView?(pickerView, viewForRow: row, forComponent: component, reusing: view) ?? UIView()
             }
             
-            return contentProvider?.contentForRow(row, reusing: view) ?? UIView()
-        }
-        
-        override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            contentProvider?.numberOfRows ?? 0
+            return contentForRow(row, reusing: view) ?? UIView()
         }
     }
     
@@ -327,6 +220,14 @@ extension PickerViewComponentBinding: Cancellable {
         return Self.items(publisher, contentForElement: { $0.pickerTitle })
     }
 
+    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentBinding where OA.Element == Element {
+        return Self.items(items.changeSetPublisher, contentForElement: contentForElement)
+    }
+
+    public static func items<Element: PickerViewElement, OA: ObservableArray>(_ items: OA) -> PickerViewComponentBinding where Element.Content == NSAttributedString, OA.Element == Element {
+        return Self.items(items.changeSetPublisher)
+    }
+
     public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentBinding {
         return Self.items(Just(.initial(items)), contentForElement: contentForElement)
     }
@@ -349,6 +250,14 @@ extension PickerViewComponentBinding: Cancellable {
 
             return view
         })
+    }
+    
+    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentBinding where OA.Element == Element {
+        return Self.items(items.changeSetPublisher, contentForElement: contentForElement)
+    }
+
+    public static func items<Element: BindableViewModelItem, OA: ObservableArray>(_ items: OA) -> PickerViewComponentBinding where Element.View: UIView, OA.Element == Element {
+        return Self.items(items.changeSetPublisher)
     }
 
     public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentBinding {
