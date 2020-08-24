@@ -80,14 +80,6 @@ public class PickerViewBindingBase: ComposableDelegate<UIPickerViewDataSourceAnd
         }
     }
     
-    public override func responds(to aSelector: Selector!) -> Bool {
-        let result = super.responds(to: aSelector)
-        
-        print("PickerViewBinding.responds(to: \(aSelector!)) = \(result)")
-        
-        return result
-    }
-    
     public func cancel() {
     }
     
@@ -113,41 +105,50 @@ public class PickerViewComponentBinding: PickerViewBindingBase {
     }
 }
 
-extension PickerViewComponentBinding: Cancellable {
-    private class Items<Element, Content>: PickerViewComponentBinding {
-        private var items: [Element]
+public class PickerViewComponentItemsBinding<Element>: PickerViewComponentBinding {
+    fileprivate var items: [Element] = []
+    fileprivate var _onItemsChanged: () -> Void = { }
+    fileprivate func onItemsChanged(_ block: @escaping () -> Void) {
+        let prev = _onItemsChanged
+        
+        _onItemsChanged = {
+            prev()
+            block()
+        }
+    }
+}
+
+extension PickerViewComponentBinding {
+    private class Items<Element, Content>: PickerViewComponentItemsBinding<Element> {
         private let contentForElement: (Element, Content?) -> Content?
-        private var binding: AnyCancellable?
+        private var sink: AnyCancellable?
 
         init<P: Publisher>(_ publisher: P, contentForElement: @escaping (Element, Content?) -> Content?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
             
-            self.items = []
             self.contentForElement = contentForElement
             super.init(nextDelegate: nextDelegate)
             
-            self.binding = publisher.currentValuePublisher().sink { [weak self] (newItems) in
+            sink = publisher.currentValuePublisher().sink { [weak self] (newItems) in
                 guard let self = self else { return }
                 
                 self.items = newItems
                 self.pickerView?.reloadComponent(self.component)
+                self._onItemsChanged()
             }
         }
         
         convenience init<P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> Content?, nextDelegate: UIPickerViewDataSourceAndDelegate? = nil) where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
-            self.init(publisher, contentForElement: { (element, _) in contentForElement(element) })
+            self.init(publisher, contentForElement: { (element, _) in contentForElement(element) }, nextDelegate: nextDelegate)
         }
-
+        
         override func cancel() {
-            binding?.cancel()
-            binding = nil
+            sink = nil
             super.cancel()
         }
-                
+        
         public func contentForRow(_ row: Int, reusing: Content? = nil) -> Content? {
             return contentForElement(items[row], reusing)
         }
-        
-        // we can only override existing methods here, we cannot declare new ones...
         
         override func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
             return items.count
@@ -186,63 +187,63 @@ extension PickerViewComponentBinding: Cancellable {
     
     // String
     
-    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> String?) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> String?) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
         return StringItems(publisher, contentForElement: contentForElement)
     }
     
-    public static func items<Element: PickerViewElement, P: Publisher>(_ publisher: P) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.Content == String {
+    public static func items<Element: PickerViewElement, P: Publisher>(_ publisher: P) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.Content == String {
         return Self.items(publisher, contentForElement: { $0.pickerTitle })
     }
     
-    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element) -> String?) -> PickerViewComponentBinding where OA.Element == Element {
+    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element) -> String?) -> PickerViewComponentItemsBinding<Element> where OA.Element == Element {
         return Self.items(items.changeSetPublisher, contentForElement: contentForElement)
     }
 
-    public static func items<Element: PickerViewElement, OA: ObservableArray>(_ items: OA) -> PickerViewComponentBinding where Element.Content == String, OA.Element == Element {
+    public static func items<Element: PickerViewElement, OA: ObservableArray>(_ items: OA) -> PickerViewComponentItemsBinding<Element> where Element.Content == String, OA.Element == Element {
         return Self.items(items.changeSetPublisher)
     }
 
-    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element) -> String?) -> PickerViewComponentBinding {
+    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element) -> String?) -> PickerViewComponentItemsBinding<Element> {
         return Self.items(Just(.initial(items)), contentForElement: contentForElement)
     }
     
-    public static func items<Element: PickerViewElement>(_ items: [Element]) -> PickerViewComponentBinding where Element.Content == String {
+    public static func items<Element: PickerViewElement>(_ items: [Element]) -> PickerViewComponentItemsBinding<Element> where Element.Content == String {
         return Self.items(Just(.initial(items)))
     }
     
     // NSAttributedString
 
-    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
         return AttributedStringItems(publisher, contentForElement: contentForElement)
     }
 
-    public static func items<Element: PickerViewElement, P: Publisher>(_ publisher: P) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.Content == NSAttributedString {
+    public static func items<Element: PickerViewElement, P: Publisher>(_ publisher: P) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.Content == NSAttributedString {
         return Self.items(publisher, contentForElement: { $0.pickerTitle })
     }
 
-    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentBinding where OA.Element == Element {
+    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentItemsBinding<Element> where OA.Element == Element {
         return Self.items(items.changeSetPublisher, contentForElement: contentForElement)
     }
 
-    public static func items<Element: PickerViewElement, OA: ObservableArray>(_ items: OA) -> PickerViewComponentBinding where Element.Content == NSAttributedString, OA.Element == Element {
+    public static func items<Element: PickerViewElement, OA: ObservableArray>(_ items: OA) -> PickerViewComponentItemsBinding<Element> where Element.Content == NSAttributedString, OA.Element == Element {
         return Self.items(items.changeSetPublisher)
     }
 
-    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentBinding {
+    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element) -> NSAttributedString?) -> PickerViewComponentItemsBinding<Element> {
         return Self.items(Just(.initial(items)), contentForElement: contentForElement)
     }
 
-    public static func items<Element: PickerViewElement>(_ items: [Element]) -> PickerViewComponentBinding where Element.Content == NSAttributedString {
+    public static func items<Element: PickerViewElement>(_ items: [Element]) -> PickerViewComponentItemsBinding<Element> where Element.Content == NSAttributedString {
         return Self.items(Just(.initial(items)))
     }
 
     // UIView
 
-    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
+    public static func items<Element, P: Publisher>(_ publisher: P, contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never {
         return ViewItems(publisher, contentForElement: contentForElement)
     }
 
-    public static func items<Element: BindableViewModelItem, P: Publisher>(_ publisher: P) -> PickerViewComponentBinding where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.View: UIView {
+    public static func items<Element: BindableViewModelItem, P: Publisher>(_ publisher: P) -> PickerViewComponentItemsBinding<Element> where P.Output == RealmCollectionChange<[Element]>, P.Failure == Never, Element.View: UIView {
         return Self.items(publisher, contentForElement: { (element, reuseView) in
             let view = (reuseView as? Element.View) ?? Element.bindableViewTypeFor(element).init()
 
@@ -252,20 +253,99 @@ extension PickerViewComponentBinding: Cancellable {
         })
     }
     
-    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentBinding where OA.Element == Element {
+    public static func items<Element, OA: ObservableArray>(_ items: OA, contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentItemsBinding<Element> where OA.Element == Element {
         return Self.items(items.changeSetPublisher, contentForElement: contentForElement)
     }
 
-    public static func items<Element: BindableViewModelItem, OA: ObservableArray>(_ items: OA) -> PickerViewComponentBinding where Element.View: UIView, OA.Element == Element {
+    public static func items<Element: BindableViewModelItem, OA: ObservableArray>(_ items: OA) -> PickerViewComponentItemsBinding<Element> where Element.View: UIView, OA.Element == Element {
         return Self.items(items.changeSetPublisher)
     }
 
-    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentBinding {
+    public static func items<Element>(_ items: [Element], contentForElement: @escaping (Element, UIView?) -> UIView) -> PickerViewComponentItemsBinding<Element> {
         return Self.items(Just(.initial(items)), contentForElement: contentForElement)
     }
 
-    public static func items<Element: BindableViewModelItem>(_ items: [Element]) -> PickerViewComponentBinding where Element.View: UIView {
+    public static func items<Element: BindableViewModelItem>(_ items: [Element]) -> PickerViewComponentItemsBinding<Element> where Element.View: UIView {
         return Self.items(Just(.initial(items)))
+    }
+}
+
+extension PickerViewComponentItemsBinding {
+    private class Value: PickerViewComponentBinding {
+        private let setValue: (Element) -> Void
+        private let isEqual: (Element, Element) -> Bool
+        private var sink: AnyCancellable?
+        private var currentValue: Element?
+        
+        private var itemsBinding: PickerViewComponentItemsBinding { return nextDelegate as! PickerViewComponentItemsBinding<Element> }
+        
+        private func trySetCurrentValue() {
+            // Set the picker to the current value we have if possible.
+            // if we don't have all the info we need, wait
+        
+            guard let currentValue = self.currentValue else {
+                return // no current value
+            }
+            
+            guard let pickerView = self.pickerView else {
+                return // picker not set yet
+            }
+            
+            guard let row = itemsBinding.items.firstIndex(where: { self.isEqual(currentValue, $0) }) else {
+                return // currentValue not in items array
+            }
+            
+            guard row != pickerView.selectedRow(inComponent: self.component) else {
+                return // already set
+            }
+            
+            pickerView.selectRow(row, inComponent: self.component, animated: true)
+        }
+        
+        public init<S: Subject>(_ itemsBinding: PickerViewComponentItemsBinding, _ subject: S, isEqual: @escaping (Element, Element) -> Bool) where S.Output == Element, S.Failure == Never {
+            self.setValue = { subject.send($0) }
+            self.isEqual = isEqual
+            super.init(nextDelegate: itemsBinding)
+            
+            sink = subject.sink { (value) in
+                if let currentValue = self.currentValue, self.isEqual(value, currentValue) {
+                    return
+                }
+                
+                self.currentValue = value
+                self.trySetCurrentValue()
+            }
+            
+            itemsBinding.onItemsChanged { [weak self] in
+                self?.trySetCurrentValue()
+            }
+            
+            self.onInitialized { [weak self] in
+                self?.trySetCurrentValue()
+            }
+        }
+        
+        override func cancel() {
+            self.sink = nil
+            super.cancel()
+        }
+        
+        @objc func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            if component == self.component {
+                self.currentValue = itemsBinding.items[row]
+                setValue(self.currentValue!)
+            }
+            
+            nextDelegate?.pickerView?(pickerView, didSelectRow: row, inComponent: component)
+        }
+    }
+    
+    public func value<S: Subject>(_ value: S, isEqual: @escaping (Element, Element) -> Bool) -> PickerViewComponentBinding where S.Output == Element, S.Failure == Never {
+        return Value(self, value, isEqual: isEqual)
+    }
+    
+    public func value<S: Subject>(_ value: S) -> PickerViewComponentBinding where S.Output == Element, S.Failure == Never, Element: Equatable {
+        return Value(self, value, isEqual: { $0 == $1 })
     }
 }
 
@@ -278,17 +358,16 @@ extension PickerViewComponentBinding {
             super.init(nextDelegate: nextDelegate)
         }
         
-        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            guard component == self.component else {
-                nextDelegate?.pickerView?(pickerView, didSelectRow: row, inComponent: component)
-                return
+        @objc func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            if component == self.component {
+                self.action(row)
             }
             
-            self.action(row)
+            nextDelegate?.pickerView?(pickerView, didSelectRow: row, inComponent: component)
         }
     }
     
-    public func didSelectRow(_ action: @escaping (Int) -> Void) ->PickerViewComponentBinding {
+    public func didSelectRow(_ action: @escaping (Int) -> Void) -> PickerViewComponentBinding {
         return DidSelectRow(action, nextDelegate: self)
     }
 }

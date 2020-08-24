@@ -63,9 +63,7 @@ class AddPersonViewController: UIViewController {
             self.lastNameTextField *= TextFieldBinding.subject(viewModel.lastName).nextField(self.genderTextField)
             self.genderTextField.textBinding *= viewModel.gender.map(\.name)
             
-            self.genderPickerView *= PickerViewComponentBinding
-                .items(viewModel.genders)
-                .didSelectRow({ self.viewModel.gender.value = self.viewModel.genders[$0] })
+            self.genderPickerView *= PickerViewComponentBinding.items(viewModel.genders).value(viewModel.gender)
         }
     }
     
