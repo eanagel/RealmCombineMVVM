@@ -371,3 +371,68 @@ extension PickerViewComponentBinding {
         return DidSelectRow(action, nextDelegate: self)
     }
 }
+
+extension PickerViewComponentBinding {
+    private class Row: PickerViewComponentBinding {
+        private let setValue: (Int) -> Void
+        private var sink: AnyCancellable?
+        private var currentRow: Int?
+        
+        private func trySetCurrentRow() {
+            // Set the picker to currentRow if possible.
+            // if we don't have all the info we need, wait
+        
+            guard let pickerView = self.pickerView else {
+                return // picker not set yet
+            }
+            
+            guard let row = self.currentRow else {
+                return // no current row
+            }
+            
+            guard row != pickerView.selectedRow(inComponent: self.component) else {
+                return // already set
+            }
+            
+            pickerView.selectRow(row, inComponent: self.component, animated: true)
+        }
+        
+        public init<S: Subject>(_ subject: S, nextDelegate: PickerViewComponentBinding?) where S.Output == Int, S.Failure == Never {
+            self.setValue = { subject.send($0) }
+            super.init(nextDelegate: nextDelegate)
+            
+            sink = subject.sink { (row) in
+                if self.currentRow == row {
+                    return
+                }
+                
+                self.currentRow = row
+                self.trySetCurrentRow()
+            }
+            
+            // we don't get a signal on reload :(
+            
+            self.onInitialized { [weak self] in
+                self?.trySetCurrentRow()
+            }
+        }
+        
+        override func cancel() {
+            self.sink = nil
+            super.cancel()
+        }
+        
+        @objc func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+            if component == self.component {
+                self.currentRow = row
+                setValue(row)
+            }
+            
+            nextDelegate?.pickerView?(pickerView, didSelectRow: row, inComponent: component)
+        }
+    }
+    
+    public func row<S: Subject>(_ value: S) -> PickerViewComponentBinding where S.Output == Int, S.Failure == Never {
+        return Row(value, nextDelegate: self)
+    }
+}
